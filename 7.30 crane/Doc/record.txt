@@ -1,0 +1,409 @@
+u8 bjchoose1=0,bjchoose2=0,bj_i=0;
+u8 bj1_rise_flag=0,bj1_fall_flag=0;
+u8 bj2_advance_flag=0,bj2_retreat_flag=0;
+u16 bj1_count=0,bj2_count=0;
+u16 bj1_dis1[6]={2800,2800,0,0,0,0},
+    bj1_dis2[6]={2800,2800,0,0,0,0},
+		bj2_dis1[6]={2800,2800,0,0,0,0},
+		bj2_dis2[6]={2800,2800,0,0,0,0};
+		
+		
+if(htim->Instance == TIM4)
+			{
+				 if(bjchoose1 == 1)//满步数：？ 下降
+					{
+						if(bj1_count < bj1_dis1[bj_i])
+							{
+								bj1_count++;
+							}
+						else
+							{					
+								HAL_TIM_PWM_Stop_IT(&htim4, TIM_CHANNEL_1);
+								bj1_count = 0;bjchoose1 =0;
+								bj1_fall_flag =1;
+	//												printf("进入中断1bjchoose=%d\r\n",bjchoose);
+							}
+					}
+				else if(bjchoose1 == 2)//满步数：？ 上升
+					{	
+						if(bj1_count < bj1_dis2[bj_i])
+							{
+								bj1_count++;
+							}
+						else
+							{					
+								HAL_TIM_PWM_Stop_IT(&htim4, TIM_CHANNEL_1);
+								bj1_count = 0;bjchoose1 =0;
+								bj1_rise_flag = 1;
+	//												printf("进入中断1bjchoose=%d\r\n",bjchoose);
+							}
+					}
+/****************************************************/					
+				 if(bjchoose2 == 1)//满步数：5000步 前移
+					{
+						if(bj2_count < bj2_dis1[bj_i])
+							{
+								bj2_count++;
+							}
+						else
+							{					
+								HAL_TIM_PWM_Stop_IT(&htim4, TIM_CHANNEL_2);
+								bj2_count = 0;bjchoose2 =0;
+								bj2_advance_flag =1;
+	//												printf("进入中断1bjchoose=%d\r\n",bjchoose);
+							}
+					}
+				else if(bjchoose2 == 2)//满步数：5000步 后退
+					{	
+						if(bj2_count < bj2_dis2[bj_i])
+							{
+								bj2_count++;
+							}
+						else
+							{					
+								HAL_TIM_PWM_Stop_IT(&htim4, TIM_CHANNEL_2);
+								bj2_count = 0;bjchoose2 =0;
+								bj2_retreat_flag =1;
+	//												printf("进入中断1bjchoose=%d\r\n",bjchoose);
+							}
+					}					
+			}
+			
+			
+			
+			
+			
+#include "bj_motor.h"
+#include "stdio.h"
+
+/choose1 57运动 1：下降  2：上升
+/choose2 42运动 1：前移  2：后退
+//judge[]  1:可乐  2：乐扣
+
+extern uint8_t bjchoose1,bjchoose2,x1,y1,bj_i,ceju_flag,judge[6];
+extern uint16_t bj_dis1[10],bj_dis2[10];
+extern u8 bj1_rise_flag,bj1_fall_flag;
+extern u8 bj2_advance_flag,bj2_retreat_flag;
+
+void djyundong()
+{
+	if(ceju_flag>2)
+	{
+		bj_dis_change();
+		if(judge[bj_i]==1)//抓取可乐--bj2前移 bj1下降 bj1上升
+		{
+			if(bj2_advance_flag==0)
+			{			
+				bjchoose2=1;
+			}
+			else if(bj2_advance_flag==1&&bj1_fall_flag==0)
+			{
+				bjchoose1=1;
+			}
+			else if(bj1_fall_flag==1&&bj1_rise_flag ==0)
+			{
+				bjchoose1=2;
+			}
+		}
+		else if(judge[bj_i]==2)//抓取乐扣--bj1下降 bj1上升
+		{
+			if(bj1_fall_flag==0)
+			{
+				bjchoose1=1;
+			}
+			else if(bj1_fall_flag==1&&bj1_rise_flag ==0)
+			{
+				bjchoose1=2;
+			}
+		}		
+/*****************///步进电机通道开启函数		
+	  if(bjchoose1 ==1)
+		{
+			HAL_GPIO_WritePin(DIR1_GPIO_Port, DIR1_Pin, GPIO_PIN_RESET);
+			HAL_TIM_PWM_Start_IT(&htim4,TIM_CHANNEL_1);
+//    printf ("1\n");			
+		}
+    else if(bjchoose1 == 2)
+		{
+			HAL_GPIO_WritePin(DIR1_GPIO_Port, DIR1_Pin, GPIO_PIN_SET);
+			HAL_TIM_PWM_Start_IT(&htim4,TIM_CHANNEL_1);
+			
+		}
+	  if(bjchoose2 ==1)
+		{
+			HAL_GPIO_WritePin(DIR2_GPIO_Port, DIR2_Pin, GPIO_PIN_RESET);
+			HAL_TIM_PWM_Start_IT(&htim4,TIM_CHANNEL_2);
+//    printf ("1\n");			
+		}
+    else if(bjchoose2 == 2)
+		{
+			HAL_GPIO_WritePin(DIR2_GPIO_Port, DIR2_Pin, GPIO_PIN_SET);
+			HAL_TIM_PWM_Start_IT(&htim4,TIM_CHANNEL_2);
+			
+		}
+	}		
+}
+
+
+
+
+u8 bjchoose1=0,bjchoose2=0,bj_i=0,bj_j=3,bj_m=0;/1_dis1[bj_j][bj_i]
+u8 bj1_rise_flag=0,bj1_fall_flag=0,put_bj1_fall_flag=0,put_bj1_rise_flag=0;
+u8 bj2_advance_flag=0,bj2_retreat_flag=0;
+u16 bj1_count=0,bj2_count=0;
+/choose1 57运动 1：下降  2：上升 3; 放置下降  4：放置上升
+/choose2 42运动 1：前移  2：后退
+//judge[]  1:可乐  2：乐扣
+u16 bj1_dis1[2][6]={
+{2800,2800,0,0,0,0},// 可乐下降
+{2800,2800,0,0,0,0},// 乐扣下降
+},//
+    bj1_dis2[2][6]={
+{2800,2800,0,0,0,0},// 可乐下降
+{2800,2800,0,0,0,0},// 乐扣下降
+},
+		
+bj2_dis1[2][6]={
+{2800,2800,0,0,0,0},//可乐前移
+{2800,2800,0,0,0,0},//乐扣前移
+},
+bj2_dis2[6]={2800,2800,0,0,0,0},
+put_bj1_dis1[3]={0,0,0},// 3; 放置下降
+put_bj1_dis2[3]={0,0,0};// 4：放置上升
+
+
+
+#include "bj_motor.h"
+#include "stdio.h"
+
+/choose1 57运动 1：下降  2：上升 3; 放置下降  4：放置上升
+/choose2 42运动 1：前移  2：后退
+//judge[]  1:可乐  2：乐扣
+
+extern uint8_t bjchoose1,bjchoose2,x1,y1,bj_i,bj_j,bj_m,ceju_flag,judge[6];
+extern uint16_t bj_dis1[2][6],bj_dis2[2][6];
+extern u8 bj1_rise_flag,bj1_fall_flag,put_bj1_rise_flag,put_bj1_fall_flag;
+extern u8 bj2_advance_flag,bj2_retreat_flag;
+u8 djyundong_flag=0,bj_m_increase=0;
+
+void bj_int()
+{
+	bjchoose1=0;bjchoose2=0;
+	bj_i=0;bj_j=3;
+	bj1_rise_flag=0,bj1_fall_flag=0;
+	put_bj1_rise_flag=0,put_bj1_fall_flag=0;
+	bj2_advance_flag=0,bj2_retreat_flag=0;
+	bj_m_increase=0;
+	djyundong_flag=0;
+}
+
+void djyundong()
+{
+	
+	if(ceju_flag>2)
+	{
+		bj_dis_change();
+		if(judge[bj_i]==1)//抓取可乐--bj1下降 bj1上升
+		{
+			bj_j=0;
+      if(bj1_fall_flag==0)
+			{
+				bjchoose1=1;
+			}
+			else if(bj1_fall_flag==1&&bj1_rise_flag ==0)
+			{
+				bjchoose1=2;
+			}
+			else if(bj1_rise_flag ==1)
+			{
+				djyundong_flag=1;//结束
+			}
+		}
+		else if(judge[bj_i]==2)//抓取乐扣--bj2微前移 bj1下降 bj1上升 bj2后退 bj1_put下降 bj1_put上升 bj2 大前进 bj1下降
+		{
+			bj_j=1;
+			if(bj_m_increase==0)
+			{
+				bj_m++;
+				bj_m_increase=1;
+			}
+			if(bj2_advance_flag==0)
+			{
+				bjchoose2=1;
+			}
+			else if(bj1_fall_flag==0&&bj2_advance_flag==1)
+			{
+				bjchoose1=1;
+			}
+			else if(bj1_fall_flag==1&&bj1_rise_flag ==0)
+			{
+				bjchoose1=2;
+			}
+			else if(bj1_rise_flag==1&&bj2_retreat_flag ==0)
+			{
+				bjchoose2=2;
+			}
+			else if(bj2_retreat_flag==1&&put_bj1_fall_flag ==0)
+			{
+				bjchoose1=3;
+			}
+			else if(put_bj1_fall_flag==1&&put_bj1_rise_flag ==0)
+			{
+				bjchoose1=4;
+			}
+			else if(put_bj1_rise_flag==1&&bj2_advance_flag ==1)
+			{
+				bjchoose2=1;
+			}
+			else if(bj2_advance_flag ==2&&bj1_fall_flag==1)
+			{
+				bjchoose1=1;
+			}
+			else if(bj1_fall_flag==2)
+			{
+				djyundong_flag=1;//结束
+			}
+		}		
+/*****************///步进电机通道开启函数		
+	  if(bjchoose1 ==1||bjchoose1 ==3)
+		{
+			HAL_GPIO_WritePin(DIR1_GPIO_Port, DIR1_Pin, GPIO_PIN_RESET);
+			HAL_TIM_PWM_Start_IT(&htim4,TIM_CHANNEL_1);
+//    printf ("1\n");			
+		}
+    else if(bjchoose1 == 2||bjchoose1 ==4)
+		{
+			HAL_GPIO_WritePin(DIR1_GPIO_Port, DIR1_Pin, GPIO_PIN_SET);
+			HAL_TIM_PWM_Start_IT(&htim4,TIM_CHANNEL_1);
+			
+		}
+	  if(bjchoose2 ==1)
+		{
+			HAL_GPIO_WritePin(DIR2_GPIO_Port, DIR2_Pin, GPIO_PIN_RESET);
+			HAL_TIM_PWM_Start_IT(&htim4,TIM_CHANNEL_2);
+//    printf ("1\n");			
+		}
+    else if(bjchoose2 == 2)
+		{
+			HAL_GPIO_WritePin(DIR2_GPIO_Port, DIR2_Pin, GPIO_PIN_SET);
+			HAL_TIM_PWM_Start_IT(&htim4,TIM_CHANNEL_2);
+			
+		}
+	}		
+}
+
+
+
+
+
+
+
+
+
+if(htim->Instance == TIM4)
+			{
+				 if(bjchoose1 == 1)//满步数：？ 下降
+					{
+						if(bj1_count < bj1_dis1[bj_j+2*(bj_m-1)][bj_i])
+							{
+								bj1_count++;
+							}
+						else
+							{					
+								HAL_TIM_PWM_Stop_IT(&htim4, TIM_CHANNEL_1);
+								bj1_count = 0;bjchoose1 =0;
+								if(bj1_fall_flag==0)
+								{
+									bj1_fall_flag=1;
+								}
+								else if(bj1_fall_flag ==1&&bj2_advance_flag ==2)
+								{
+									bj1_fall_flag=2;
+								}
+	//												printf("进入中断1bjchoose=%d\r\n",bjchoose);
+							}
+					}
+				else if(bjchoose1 == 2)//满步数：？ 上升
+					{	
+						if(bj1_count < bj1_dis1[bj_j+2*(bj_m-1)][bj_i])
+							{
+								bj1_count++;
+							}
+						else
+							{					
+								HAL_TIM_PWM_Stop_IT(&htim4, TIM_CHANNEL_1);
+								bj1_count = 0;bjchoose1 =0;
+								bj1_rise_flag = 1;
+	//												printf("进入中断1bjchoose=%d\r\n",bjchoose);
+							}
+					}
+/****************************************************/	
+				 else if(bjchoose1 == 3)//满步数：？ 放置下降
+					{
+						if(bj1_count < put_bj1_dis1[bj_m-1])
+							{
+								bj1_count++;
+							}
+						else
+							{					
+								HAL_TIM_PWM_Stop_IT(&htim4, TIM_CHANNEL_1);
+								bj1_count = 0;bjchoose1 =0;
+								put_bj1_fall_flag =1;
+	//												printf("进入中断1bjchoose=%d\r\n",bjchoose);
+							}
+					}
+				else if(bjchoose1 == 4)//满步数：？ 放置后上升
+					{	
+						if(bj1_count < put_bj1_dis1[bj_m-1])
+							{
+								bj1_count++;
+							}
+						else
+							{					
+								HAL_TIM_PWM_Stop_IT(&htim4, TIM_CHANNEL_1);
+								bj1_count = 0;bjchoose1 =0;
+								put_bj1_rise_flag = 1;
+	//												printf("进入中断1bjchoose=%d\r\n",bjchoose);
+							}
+					}
+
+					
+/****************************************************/					
+				 if(bjchoose2 == 1)//满步数：5000步 前移
+					{
+						if(bj2_count < bj2_dis1[bj_n][bj_i])
+							{
+								bj2_count++;
+							}
+						else
+							{					
+								HAL_TIM_PWM_Stop_IT(&htim4, TIM_CHANNEL_2);
+								bj2_count = 0;bjchoose2 =0;
+								bj_n++;
+								if(bj_n==1)
+								{
+								   bj2_advance_flag =1;
+								}
+								else if(bj_n==2)
+								{
+									 bj2_advance_flag =2;
+									
+								}
+	//												printf("进入中断1bjchoose=%d\r\n",bjchoose);
+							}
+					}
+				else if(bjchoose2 == 2)//满步数：5000步 后退
+					{	
+						if(bj2_count < bj2_dis2[bj_i])
+							{
+								bj2_count++;
+							}
+						else
+							{					
+								HAL_TIM_PWM_Stop_IT(&htim4, TIM_CHANNEL_2);
+								bj2_count = 0;bjchoose2 =0;
+								bj2_retreat_flag =1;
+	//												printf("进入中断1bjchoose=%d\r\n",bjchoose);
+							}
+					}					
+			}
