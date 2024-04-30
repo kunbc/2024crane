@@ -16,7 +16,7 @@ uint8_t qingkuang=0,cejvfankui_flag=0;/*测距结果综合*/
 uint8_t ceju_flag=0;/*测距标志位*/
 
 //步进电机参数
-extern double crane_init[3],sec1_bj[4],sce2_zhubei[2],sec2o3_qs[2][4],sec2o3_py[4],sce3_zhubei[3];/*步数数组*/
+extern double crane_init[3],sec1_bj[3],sce2_zhubei[2],sec2o3_qs[2][3],sec2o3_py[4],sce3_zhubei[3];/*步数数组*/
 extern __IO  uint32_t g_add_pulse_count[4];    /* 脉冲个数累计*/
 uint8_t bj1_jc=0,bj2_jc=0,bj3_jc=0,bj4_jc=0;/*决策标志*/
 
@@ -65,26 +65,23 @@ void zhengji(void)
 /*****************起重机状态初始化********************/	
 		if(Initflag==0&&action ==1)
 		{
-				Crane_Init_juece();
-				Crane_Init_yundong();
+				Crane_Init();
 		}
 		else if(Initflag==1&&action ==0)
 		{			
-				HAL_UART_Transmit(&huart5, (uint8_t *)"3", 1,0xFFFF);//初始化完成，大车行进
-				printf ("init over\r\n");					
 				Initflag=2;
+				printf ("init over***Initflag=%d***zhengji_flag=%d\r\n",Initflag,zhengji_flag);					
 		}
 /**********************第一阶段***********************/	
 		else if(Initflag==2)
 		{
-			sec1();
-//				printf("Initflag=%d\r\n",Initflag);
+				sec1();
 		}
 		else if(Initflag==3)
 		{
 				zhengji_flag=2;
-				printf("section1 over\r\n");
 				Initflag=4;
+				printf ("section1 over***Initflag=%d***zhengji_flag=%d\r\n",Initflag,zhengji_flag);					
 		}
 /**********************第二阶段准备***********************/	
 		else if(Initflag==4)
@@ -94,8 +91,8 @@ void zhengji(void)
 		else if(Initflag==5)
 		{
 				zhengji_flag=4;
-				printf("section2 zhunbei over\r\n");
 				Initflag=6;
+				printf ("section2 zhunbei over***Initflag=%d***zhengji_flag=%d\r\n",Initflag,zhengji_flag);
 		}
 /**********************第二阶段****************************/
 		else if(Initflag==6)
@@ -105,8 +102,9 @@ void zhengji(void)
 		else if(Initflag==7)
 		{
 				zhengji_flag=6;
-				printf("section2 over\r\n");
 				Initflag=8;
+				HAL_Delay(3000);
+				printf ("section2 over***Initflag=%d***zhengji_flag=%d\r\n",Initflag,zhengji_flag);
 		}
 /**********************第三阶段准备***********************/	
 		else if(Initflag==8)
@@ -116,8 +114,8 @@ void zhengji(void)
 		else if(Initflag==9)
 		{
 				zhengji_flag=8;
-				printf("section3 zhunbei over\r\n");
 				Initflag=10;
+				printf ("section3 zhunbei over***Initflag=%d***zhengji_flag=%d\r\n",Initflag,zhengji_flag);
 		}
 /**********************第三阶段****************************/
 		else if(Initflag==10)
@@ -127,19 +125,11 @@ void zhengji(void)
 		else if(Initflag==11)
 		{
 				zhengji_flag=10;
-				printf("section3 over\r\n");
 				Initflag=12;
+				printf ("section3 over***Initflag=%d***zhengji_flag=%d\r\n",Initflag,zhengji_flag);
 		}
 
 }
-
-
-
-
-
-
-
-	
 
 
 
@@ -161,7 +151,6 @@ void sec2o3 (void)
 /******************************判断阶段**************************************/		
 		if(zhengji_flag==5||zhengji_flag==9)
 		{
-//			printf("ceju_flag=%d\r\n",ceju_flag);
 				if((ceju_flag==0 && location==4)||(ceju_flag==0 && location==7)) 
 				{//识别20次
 						for(int i=0; i<20; i++)
@@ -241,7 +230,7 @@ void sec2o3 (void)
 				else if(gc_flag==3)
 				{
 					gc_flag++;//4
-					printf("起升完成\r\n");
+					printf("大车走\r\n");
 					Initflag++;	//7 //9
 					HAL_UART_Transmit(&huart5, (uint8_t *)"3", 1,0xFFFF);//放完大车走
 				}
@@ -292,7 +281,7 @@ void sec2o3 (void)
 				else if(gc_flag==4)
 				{
 					gc_flag++;//5
-					printf("起升完成\r\n");
+					printf("大车走\r\n");
 					Initflag++;	//7 //9
 					HAL_UART_Transmit(&huart5, (uint8_t *)"3", 1,0xFFFF);//放完大车走		
 				}							
@@ -301,33 +290,33 @@ void sec2o3 (void)
 		{
 				if(gc_flag==0)
 				{
-					if (location==4||location==7)
-					{
-						switch(qingkuang)
-						{
-							case 3:
-									if(sec2o3_zhuaqv1()==OK)
-									{
-											gc_flag++;//1
-											HAL_UART_Transmit(&huart5, (uint8_t *)"3", 1,0xFFFF);//抓完大车走
-											
-									} break;
-							case 4:
-									if(sec2o3_zhuaqv2()==OK)
-									{
-											gc_flag++;//1
-											HAL_UART_Transmit(&huart5, (uint8_t *)"3", 1,0xFFFF);//抓完大车走
-											
-									} break;
-							default: break;
-						}
-					}
+							if (location==4||location==7)
+							{
+										switch(qingkuang)
+										{
+											case 3:
+													if(sec2o3_zhuaqv1()==OK)
+													{
+															gc_flag++;//1
+															HAL_UART_Transmit(&huart5, (uint8_t *)"3", 1,0xFFFF);//抓完大车走
+															printf("servo1 抓取完成\r\n");
+													} break;
+											case 4:
+													if(sec2o3_zhuaqv2()==OK)
+													{
+															gc_flag++;//1
+															HAL_UART_Transmit(&huart5, (uint8_t *)"3", 1,0xFFFF);//抓完大车走
+															printf("servo2 抓取完成\r\n");									
+													} break;
+										}
+							}
 				}
 				else if(gc_flag==1)
 				{	
 						if(nei_py()==OK)
 						{
 								gc_flag++;//2
+								printf("内平移完成\r\n");
 						}
 				}
 				else if(gc_flag==2)
@@ -341,12 +330,14 @@ void sec2o3 (void)
 									{
 											gc_flag++;//3
 											HAL_UART_Transmit(&huart5, (uint8_t *)"3", 1,0xFFFF);//抓完大车走
+											printf("servo2 抓取完成\r\n");
 									} break;
 							case 4:
 									if(sec2o3_zhuaqv1()==OK)
 									{
 											gc_flag++;//3
 											HAL_UART_Transmit(&huart5, (uint8_t *)"3", 1,0xFFFF);//抓完大车走
+											printf("servo1 抓取完成\r\n");
 									} break;
 							default: break;
 						}
@@ -357,6 +348,7 @@ void sec2o3 (void)
 						if(wai_py()==OK)
 						{
 								gc_flag++;//4
+								printf("外平移完成\r\n");
 						}
 						if (s1_flag==2&&s2_flag==2&&jcdl_flag==0)
 						{
@@ -370,12 +362,13 @@ void sec2o3 (void)
 						if(sec2o3_fangwu()==OK)
 						{
 								gc_flag++;//5
+								printf("放物完成\r\n");
 						}							
 					}
 				}
 				else if(gc_flag==5)
 				{
-					printf("起升结束\r\n");
+					printf("大车走\r\n");
 					gc_flag++;//6
 					Initflag++;//7 //9
 					HAL_UART_Transmit(&huart5, (uint8_t *)"3", 1,0xFFFF);//放完大车走
@@ -404,8 +397,8 @@ void section3_zhunbei(void)
 						g_add_pulse_count[2]=0;
 						g_add_pulse_count[3]=0;
 
-						stepmotor_move_rel(V_START,300,0.3f,0.3f,sce3_zhubei[1]*SPR,STEPPER_MOTOR_3);
-						stepmotor_move_rel(V_START,300,0.3f,0.3f,sce3_zhubei[2]*SPR,STEPPER_MOTOR_4);
+						stepmotor_move_rel(V_START,fast_42END,fast_42ACTIME,fast_42DETIME,sce3_zhubei[1]*SPR,STEPPER_MOTOR_3);
+						stepmotor_move_rel(V_START,fast_42END,fast_42ACTIME,fast_42DETIME,sce3_zhubei[2]*SPR,STEPPER_MOTOR_4);
 
 						stepper_start(STEPPER_MOTOR_3);
 						stepper_start(STEPPER_MOTOR_4);
@@ -417,8 +410,8 @@ void section3_zhunbei(void)
 						g_add_pulse_count[0]=0;
 						g_add_pulse_count[1]=0;
 						
-						stepmotor_move_rel(V_START,100,0.01,0.01,sce3_zhubei[0]*SPR,STEPPER_MOTOR_1);
-						stepmotor_move_rel(V_START,100,0.01,0.01,sce3_zhubei[0]*SPR,STEPPER_MOTOR_2);
+						stepmotor_move_rel(V_START,fast_57END,fast_57ACTIME,fast_57DETIME,sce3_zhubei[0]*SPR,STEPPER_MOTOR_1);
+						stepmotor_move_rel(V_START,fast_57END,fast_57ACTIME,fast_57DETIME,sce3_zhubei[0]*SPR,STEPPER_MOTOR_2);
 					
 						stepper_start(STEPPER_MOTOR_1);
 						stepper_start(STEPPER_MOTOR_2);
@@ -426,17 +419,16 @@ void section3_zhunbei(void)
 						bj1_jc=1;
 						bj2_jc=1;
 				}
-				
-				if(g_motor1_sta==STATE_IDLE&&g_motor2_sta==STATE_IDLE)
+				if(g_motor3_sta==STATE_IDLE&&g_motor4_sta==STATE_IDLE&&bj3_jc==1&&bj4_jc==1)
+				{
+						bj3_jc=2;
+						bj4_jc=2;
+				}
+				else if(g_motor1_sta==STATE_IDLE&&g_motor2_sta==STATE_IDLE&&bj1_jc==1&&bj2_jc==1)
 				{
 						bj1_jc=2;
 						bj2_jc=2;
 						Initflag=9;					
-				}
-				else if(g_motor3_sta==STATE_IDLE&&g_motor4_sta==STATE_IDLE)
-				{
-						bj3_jc=2;
-						bj4_jc=2;
 				}				
 		}
 }
@@ -459,14 +451,14 @@ void section2_zhunbei(void)
 			if(bj1_jc==0&&bj3_jc==0)
 			{
 				g_add_pulse_count[2]=0;
-				stepmotor_move_rel(V_START,300,0.3f,0.3f,sce2_zhubei[1]*SPR,STEPPER_MOTOR_3);
+				stepmotor_move_rel(V_START,fast_42END,fast_42ACTIME,fast_42DETIME,sce2_zhubei[1]*SPR,STEPPER_MOTOR_3);
 				bj3_jc=1;
 				stepper_start(STEPPER_MOTOR_3);		
 			}
 			if(bj1_jc==0&&bj3_jc==1)
 			{
 				g_add_pulse_count[0]=0;
-				stepmotor_move_rel(V_START,100,0.01f,0.01f,sce2_zhubei[0]*SPR,STEPPER_MOTOR_1);
+				stepmotor_move_rel(V_START,fast_57END,fast_57ACTIME,fast_57DETIME,sce2_zhubei[0]*SPR,STEPPER_MOTOR_1);
 				stepper_start(STEPPER_MOTOR_1);
 				bj1_jc=1;
 
@@ -526,7 +518,7 @@ void sec1 (void)
 			}
 			else if (gc_flag==2)
 			{
-				printf("起升完成\r\n");
+//				printf("起升完成\r\n");
 				Initflag=3;//第一阶段结束
 				HAL_UART_Transmit(&huart5, (uint8_t *)"3", 1,0xFFFF);//放完大车走	
 			}
@@ -557,7 +549,7 @@ void sec1 (void)
 			}
 			else if (gc_flag==3)
 			{
-				printf("起升完成\r\n");
+				printf("大车走\r\n");
 				Initflag=3;//第一阶段结束
 				HAL_UART_Transmit(&huart5, (uint8_t *)"3", 1,0xFFFF);//放完大车走	
 			}
@@ -565,12 +557,13 @@ void sec1 (void)
 	}
 }
 
+
 /**
- * @brief       起重机初始化速度决策函数
+ * @brief       起重机初始化运动函数
  * @param       无
  * @retval      void
  */
-void Crane_Init_juece(void)
+void Crane_Init(void)
 {
 			if(bj1_jc==0&&bj2_jc==0&&bj3_jc==0)
 			{
@@ -578,50 +571,38 @@ void Crane_Init_juece(void)
 					g_add_pulse_count[1]=0;
 					g_add_pulse_count[2]=0;
 					
-					stepmotor_move_rel(V_START,100,0.01,0.01,crane_init[0]*SPR,STEPPER_MOTOR_1);
-					stepmotor_move_rel(V_START,100,0.01,0.01,crane_init[1]*SPR,STEPPER_MOTOR_2);
-					stepmotor_move_rel(V_START,300,0.3f,0.3f,crane_init[2]*SPR,STEPPER_MOTOR_3);
+					stepmotor_move_rel(V_START,fast_57END,fast_57ACTIME,fast_57DETIME,crane_init[0]*SPR,STEPPER_MOTOR_1);
+					stepmotor_move_rel(V_START,fast_57END,fast_57ACTIME,fast_57DETIME,crane_init[1]*SPR,STEPPER_MOTOR_2);
+					stepmotor_move_rel(V_START,fast_42END,fast_42ACTIME,fast_42DETIME,crane_init[2]*SPR,STEPPER_MOTOR_3);
 
 					bj1_jc=1;
 					bj2_jc=1;
 					bj3_jc=1;
 			}
-
-}
-/**
- * @brief       起重机初始化运动函数
- * @param       无
- * @retval      void
- */
-void Crane_Init_yundong(void)
-{
 			if(	bj1_jc==1 && bj2_jc==1)
 			{
 					stepper_start(STEPPER_MOTOR_1);
 					stepper_start(STEPPER_MOTOR_2);
-			}
-			if(g_add_pulse_count[0] >= fabs(crane_init[0]*SPR) && g_add_pulse_count[1] >= fabs(crane_init[1]*SPR))
-			{
-					
-					if(bj3_jc==1)
-					{
-							stepper_start(STEPPER_MOTOR_3);
-		
-					}
-					if(g_add_pulse_count[2] >= fabs(crane_init[2]*SPR))
-					{
-							bj3_jc=2;
-							Initflag=1;
-							action =0;
-							steer(ZHANGKAI,SERVO_ALL);//舵机张开
-							bj1_jc=3;
-							bj2_jc=3;
-					}
-					
 					bj1_jc=2;
 					bj2_jc=2;
 			}
-			
+			if(g_motor1_sta==STATE_IDLE && g_motor2_sta==STATE_IDLE)
+			{
+					if(bj3_jc==1)
+					{
+							steer(Z_sec1,SERVO_ALL);//舵机张开
+							HAL_UART_Transmit(&huart5, (uint8_t *)"3", 1,0xFFFF);//初始化完成，大车行进
+							HAL_Delay(1000);
+						
+							stepper_start(STEPPER_MOTOR_3);
+							bj3_jc=2;
+					}
+					if(g_motor3_sta==STATE_IDLE)
+					{
+							Initflag=1;
+							action =0;
+					}
+			}	
 }
 
 /****************************************************/
@@ -643,18 +624,18 @@ int sec1_zhuaqv1(void)
 	if (bj1_jc==0&&s1jc_flag==1)
 	{
 		g_add_pulse_count[0]=0;
-		stepmotor_move_rel(V_START,100,0.01,0.01,sec1_bj[0]*SPR,STEPPER_MOTOR_1);
+		stepmotor_move_rel(V_START,fast_57END,fast_57ACTIME,fast_57DETIME,sec1_bj[0]*SPR,STEPPER_MOTOR_1);
 	
 		stepper_start(STEPPER_MOTOR_1);
 		bj1_jc=1;//1//不会再进
 //				printf("1下\r\n");
 	}
-	else if (bj1_jc==1&&s1jc_flag==1)
+	else if (bj1_jc==2&&s1jc_flag==1)
 	{
 		steer(BIHE,SERVO_1);//舵机抓
 		HAL_Delay(1000);
 		g_add_pulse_count[0]=0;
-		stepmotor_move_rel(V_START,100,0.01,0.01,sec1_bj[1]*SPR,STEPPER_MOTOR_1);
+		stepmotor_move_rel(V_START,fast_57END,fast_57ACTIME,fast_57DETIME,sec1_bj[1]*SPR,STEPPER_MOTOR_1);
 	
 		stepper_start(STEPPER_MOTOR_1);
 		bj1_jc=3;//3//不会再进
@@ -686,31 +667,27 @@ int sec1_fangwu1(void)
 	if(bj1_jc==0&&s1jc_flag==3)//要放先降
 	{
 			g_add_pulse_count[0]=0;
-			stepmotor_move_rel(V_START,100,0.01,0.01,sec1_bj[2]*SPR,STEPPER_MOTOR_1);
-		
-		
+			stepmotor_move_rel(V_START,slow_57END,slow_57ACTIME,slow_57DETIME,sec1_bj[2]*SPR,STEPPER_MOTOR_1);
 			stepper_start(STEPPER_MOTOR_1);
-			bj1_jc++;//2
-//				printf("2下\r\n");
-
+			bj1_jc=1;//1
 	}
-	else if(bj1_jc==2&&s1jc_flag==3)//放完起升
-	{
-			steer(ZHANGKAI,SERVO_1);//舵机放
-			HAL_Delay(1000);
-		
-			g_add_pulse_count[0]=0;
-			stepmotor_move_rel(V_START,100,0.01,0.01,sec1_bj[3]*SPR,STEPPER_MOTOR_1);
-			stepper_start(STEPPER_MOTOR_1);
-			bj1_jc++;//3
-//				printf("2起\r\n");
-	}
-
+//	else if(bj1_jc==2&&s1jc_flag==3)//放完起升
+//	{
+//			steer(ZHANGKAI,SERVO_1);//舵机放
+//			HAL_Delay(2000);
+//			g_add_pulse_count[0]=0;
+//			stepmotor_move_rel(V_START,100,0.01,0.01,sec1_bj[3]*SPR,STEPPER_MOTOR_1);
+//			stepper_start(STEPPER_MOTOR_1);
+//			bj1_jc++;//3
+////				printf("2起\r\n");
+//	}
 	if(g_motor1_sta==STATE_IDLE&&s1jc_flag==3)
 	{
-			bj1_jc++;//2//4
-//				printf("BBBBBbj1_jc=%d",bj1_jc);
-		if(bj1_jc==4)
+			steer(Z_sec1,SERVO_1);//舵机放
+			HAL_Delay(1000);
+			bj1_jc++;//2
+		
+		if(bj1_jc==2)
 		{
 			s1jc_flag=4;
 			return OK;
@@ -734,7 +711,7 @@ int sec2o3_zhuaqv1(void)
 		if(bj1_jc==0&&s1_flag==1)//未抓先降
 		{
 				g_add_pulse_count[0]=0;
-				stepmotor_move_rel(V_START,100,0.01,0.01,sec2o3_qs[0][0]*SPR,STEPPER_MOTOR_1);
+				stepmotor_move_rel(V_START,fast_57END,fast_57ACTIME,fast_57DETIME,sec2o3_qs[0][0]*SPR,STEPPER_MOTOR_1);
 			
 				stepper_start(STEPPER_MOTOR_1);
 				bj1_jc=1;//1//不会再进
@@ -742,11 +719,11 @@ int sec2o3_zhuaqv1(void)
 		}
 		else if(bj1_jc==2&&s1_flag==1)//抓完起升
 		{
-				steer(BIHE,SERVO_ALL);//舵机抓
-				HAL_Delay(2000);
+				steer(BIHE,SERVO_1);//舵机抓
+				HAL_Delay(1000);
 			
 				g_add_pulse_count[0]=0;
-				stepmotor_move_rel(V_START,100,0.01,0.01,sec2o3_qs[0][1]*SPR,STEPPER_MOTOR_1);
+				stepmotor_move_rel(V_START,fast_57END,fast_57ACTIME,fast_57DETIME,sec2o3_qs[0][1]*SPR,STEPPER_MOTOR_1);
 			
 				stepper_start(STEPPER_MOTOR_1);
 				bj1_jc=3;//3//不会再进
@@ -779,7 +756,7 @@ int sec2o3_zhuaqv2(void)
 		if(bj2_jc==0&&s2_flag==1)//未抓先降
 		{
 				g_add_pulse_count[0]=0;
-				stepmotor_move_rel(V_START,100,0.01,0.01,sec2o3_qs[1][0]*SPR,STEPPER_MOTOR_2);
+				stepmotor_move_rel(V_START,fast_57END,fast_57ACTIME,fast_57DETIME,sec2o3_qs[1][0]*SPR,STEPPER_MOTOR_2);
 			
 				stepper_start(STEPPER_MOTOR_2);
 				bj2_jc=1;//1//不会再进
@@ -787,11 +764,12 @@ int sec2o3_zhuaqv2(void)
 		}
 		else if(bj2_jc==2&&s2_flag==1)//抓完起升
 		{
-				steer(BIHE,SERVO_ALL);//舵机抓
-				HAL_Delay(2000);
+				steer(BIHE,SERVO_2);//舵机抓
+//				printf("*****************/duoji\r\n");
+				HAL_Delay(1000);
 			
 				g_add_pulse_count[0]=0;
-				stepmotor_move_rel(V_START,100,0.01,0.01,sec2o3_qs[1][1]*SPR,STEPPER_MOTOR_2);
+				stepmotor_move_rel(V_START,fast_57END,fast_57ACTIME,fast_57DETIME,sec2o3_qs[1][1]*SPR,STEPPER_MOTOR_2);
 			
 				stepper_start(STEPPER_MOTOR_2);
 				bj2_jc=3;//3//不会再进
@@ -825,10 +803,10 @@ int sec2o3_zhuaqv(void)
 		if(bj1_jc==0&&bj2_jc==0&&jcdl_flag==1)//未抓先降
 		{
 				g_add_pulse_count[0]=0;
-				stepmotor_move_rel(V_START,100,0.01,0.01,sec2o3_qs[0][0]*SPR,STEPPER_MOTOR_1);
+				stepmotor_move_rel(V_START,fast_57END,fast_57ACTIME,fast_57DETIME,sec2o3_qs[0][0]*SPR,STEPPER_MOTOR_1);
 			
 				g_add_pulse_count[1]=0;
-				stepmotor_move_rel(V_START,100,0.01,0.01,sec2o3_qs[1][0]*SPR,STEPPER_MOTOR_2);
+				stepmotor_move_rel(V_START,fast_57END,fast_57ACTIME,fast_57DETIME,sec2o3_qs[1][0]*SPR,STEPPER_MOTOR_2);
 			
 				stepper_start(STEPPER_MOTOR_1);
 				stepper_start(STEPPER_MOTOR_2);
@@ -842,10 +820,10 @@ int sec2o3_zhuaqv(void)
 				HAL_Delay(1000);
 			
 				g_add_pulse_count[0]=0;
-				stepmotor_move_rel(V_START,100,0.01,0.01,sec2o3_qs[0][1]*SPR,STEPPER_MOTOR_1);
+				stepmotor_move_rel(V_START,fast_57END,fast_57ACTIME,fast_57DETIME,sec2o3_qs[0][1]*SPR,STEPPER_MOTOR_1);
 			
 				g_add_pulse_count[1]=0;
-				stepmotor_move_rel(V_START,100,0.01,0.01,sec2o3_qs[1][1]*SPR,STEPPER_MOTOR_2);
+				stepmotor_move_rel(V_START,fast_57END,fast_57ACTIME,fast_57DETIME,sec2o3_qs[1][1]*SPR,STEPPER_MOTOR_2);
 			
 				stepper_start(STEPPER_MOTOR_1);
 				stepper_start(STEPPER_MOTOR_2);
@@ -891,48 +869,49 @@ int sec2o3_fangwu(void)
 		if(bj1_jc==0&&bj2_jc==0&&jcdl_flag==3)//要放先降
 		{
 				g_add_pulse_count[0]=0;
-				stepmotor_move_rel(V_START,100,0.05,0.05,sec2o3_qs[0][2]*SPR,STEPPER_MOTOR_1);
+				stepmotor_move_rel(V_START,slow_57END,slow_57ACTIME,slow_57DETIME,sec2o3_qs[0][2]*SPR,STEPPER_MOTOR_1);
 			
 				g_add_pulse_count[1]=0;
-				stepmotor_move_rel(V_START,100,0.05,0.05,sec2o3_qs[1][2]*SPR,STEPPER_MOTOR_2);
+				stepmotor_move_rel(V_START,slow_57END,slow_57ACTIME,slow_57DETIME,sec2o3_qs[1][2]*SPR,STEPPER_MOTOR_2);
 			
 				stepper_start(STEPPER_MOTOR_2);	
 				stepper_start(STEPPER_MOTOR_1);
 
 				bj1_jc++;
 				bj2_jc++;//1//不会再进
-//				printf("2下\r\n");
-
 		}
-		else if(bj1_jc==2&&bj2_jc==2&&jcdl_flag==3)//放完起升
+//		else if(bj1_jc==2&&bj2_jc==2&&jcdl_flag==3)//放完起升
+//		{
+//				steer(ZHANGKAI,SERVO_ALL);//舵机放
+//				HAL_Delay(1000);
+//			
+//				g_add_pulse_count[0]=0;
+//				stepmotor_move_rel(V_START,150,0.01,0.01,sec2o3_qs[0][3]*SPR,STEPPER_MOTOR_1);
+//			
+//				g_add_pulse_count[1]=0;
+//				stepmotor_move_rel(V_START,150,0.01,0.01,sec2o3_qs[1][3]*SPR,STEPPER_MOTOR_2);
+//				
+//				stepper_start(STEPPER_MOTOR_1);
+//				stepper_start(STEPPER_MOTOR_2);
+//				bj1_jc++;
+//				bj2_jc++;//3//不会再进
+////				printf("2起\r\n");
+
+//		}
+
+		if(g_motor1_sta==STATE_IDLE&&g_motor2_sta==STATE_IDLE&&jcdl_flag==3)
 		{
 				steer(ZHANGKAI,SERVO_ALL);//舵机放
 				HAL_Delay(1000);
 			
-				g_add_pulse_count[0]=0;
-				stepmotor_move_rel(V_START,150,0.01,0.01,sec2o3_qs[0][3]*SPR,STEPPER_MOTOR_1);
+				bj1_jc++;//2
+				bj2_jc++;//2
 			
-				g_add_pulse_count[1]=0;
-				stepmotor_move_rel(V_START,150,0.01,0.01,sec2o3_qs[1][3]*SPR,STEPPER_MOTOR_2);
-				
-				stepper_start(STEPPER_MOTOR_1);
-				stepper_start(STEPPER_MOTOR_2);
-				bj1_jc++;
-				bj2_jc++;//3//不会再进
-//				printf("2起\r\n");
-
-		}
-
-		if(g_motor1_sta==STATE_IDLE&&g_motor2_sta==STATE_IDLE&&jcdl_flag==3)
-		{
-				bj1_jc++;//2//4
-				bj2_jc++;//2//4
-//				printf("BBBBBbj1_jc=%d",bj1_jc);
-			if(bj1_jc==4&&bj2_jc==4)
-			{
-					jcdl_flag=4;
-					return OK;
-			}
+				if(bj1_jc==2&&bj2_jc==2)
+				{
+						jcdl_flag=4;
+						return OK;
+				}
 		}
 		return NONE;
 }
@@ -953,27 +932,28 @@ int nei_py(void)
 		if(bj3_jc==0&&bj4_jc==0&&jcdl2_flag==1)//抓完可以移动
 		{
 				g_add_pulse_count[2]=0;
-				stepmotor_move_rel(V_START,300,0.3f,0.3f,sec2o3_py[0]*SPR,STEPPER_MOTOR_3);
-				bj3_jc++;//1//不会再进
-				
 				g_add_pulse_count[3]=0;
-				stepmotor_move_rel(V_START,300,0.3f,0.3f,sec2o3_py[0]*SPR,STEPPER_MOTOR_4);
+
+				stepmotor_move_rel(V_START,fast_42END,fast_42ACTIME,fast_42DETIME,sec2o3_py[0]*SPR,STEPPER_MOTOR_3);
+				stepmotor_move_rel(V_START,fast_42END,fast_42ACTIME,fast_42DETIME,sec2o3_py[0]*SPR,STEPPER_MOTOR_4);
+				
+				bj3_jc++;//1//不会再进
 				bj4_jc++;//1//不会再进
 				
 				stepper_start(STEPPER_MOTOR_3);
 				stepper_start(STEPPER_MOTOR_4);
 
 		}
-		
-		if(g_motor3_sta==STATE_IDLE&&g_motor4_sta==STATE_IDLE&&jcdl2_flag==1)
-		{
-				bj1_jc++;//2
-				bj2_jc++;//2
-			
-				if(bj1_jc==2&&bj2_jc==2) 
+		if(g_motor4_sta==STATE_IDLE && g_motor3_sta==STATE_IDLE && jcdl2_flag==1)
+		{	
+				printf("*8888*\r\n");
+				bj3_jc++;//2
+				bj4_jc++;//2
+				if(bj3_jc==2&&bj4_jc==2) 
 				{
 						jcdl2_flag=2;
-					return OK;
+						printf("*99999*\r\n");
+						return OK;
 				}
 		}
 		return NONE;
@@ -995,26 +975,26 @@ int wai_py(void)
 		if(bj3_jc==0&&bj4_jc==0&&jcdl2_flag==3)//抓完可以移动
 		{
 				g_add_pulse_count[2]=0;
-				stepmotor_move_rel(V_START,100,0.01f,0.01f,sec2o3_py[1]*SPR,STEPPER_MOTOR_3);
+				stepmotor_move_rel(V_START,slow_42END,slow_42ACTIME,slow_42DETIME,sec2o3_py[1]*SPR,STEPPER_MOTOR_3);
 				bj3_jc++;//1//不会再进
 				
 				g_add_pulse_count[3]=0;
-				stepmotor_move_rel(V_START,100,0.01f,0.01f,sec2o3_py[1]*SPR,STEPPER_MOTOR_4);
+				stepmotor_move_rel(V_START,slow_42END,slow_42ACTIME,slow_42DETIME,sec2o3_py[1]*SPR,STEPPER_MOTOR_4);
 				bj4_jc++;//1//不会再进
 				
 				stepper_start(STEPPER_MOTOR_3);
 				stepper_start(STEPPER_MOTOR_4);
-
 		}
 		
 		if(g_motor4_sta==STATE_IDLE&&g_motor3_sta==STATE_IDLE&&jcdl2_flag==3)
 		{
-				bj1_jc++;//2
-				bj2_jc++;//2
+				bj3_jc++;//2
+				bj4_jc++;//2
 			
-				if(bj1_jc==2&&bj2_jc==2) {
-				jcdl2_flag=4;
-					return OK;
+				if(bj3_jc==2&&bj4_jc==2) 
+				{
+						jcdl2_flag=4;
+						return OK;
 				}	
 		}
 		return NONE;
@@ -1038,11 +1018,11 @@ int da_py(void)
 			if(bj3_jc==0&&bj4_jc==0)//抓完可以移动
 			{
 					g_add_pulse_count[2]=0;
-					stepmotor_move_rel(V_START,300,0.5f,0.5f,sec2o3_py[2]*SPR,STEPPER_MOTOR_3);
+					stepmotor_move_rel(V_START,fast_42END,fast_42ACTIME,fast_42DETIME,sec2o3_py[2]*SPR,STEPPER_MOTOR_3);
 					bj3_jc++;//1//不会再进
 					
 					g_add_pulse_count[3]=0;
-					stepmotor_move_rel(V_START,300,0.5f,0.5f,sec2o3_py[3]*SPR,STEPPER_MOTOR_4);
+					stepmotor_move_rel(V_START,fast_42END,fast_42ACTIME,fast_42DETIME,sec2o3_py[3]*SPR,STEPPER_MOTOR_4);
 					bj4_jc++;//1//不会再进
 					
 					stepper_start(STEPPER_MOTOR_3);
@@ -1052,12 +1032,13 @@ int da_py(void)
 			
 			if(g_motor4_sta==STATE_IDLE&&g_motor3_sta==STATE_IDLE)
 			{
-					bj1_jc++;//2
-					bj2_jc++;//2
+					bj3_jc++;//2
+					bj4_jc++;//2
 				
-					if(bj1_jc==2&&bj2_jc==2) {
-						jcdl2_flag=2;		
-						return OK;
+					if(bj3_jc==2&&bj4_jc==2) 
+						{
+								jcdl2_flag=2;		
+								return OK;
 						}
 			}
 		}

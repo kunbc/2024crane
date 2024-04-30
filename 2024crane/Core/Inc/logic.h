@@ -9,26 +9,28 @@
 
 /*起升电机参数宏*/
 //快速运动，步数较多
-#define L_V_END_f                 300                 /* 快速运动末速度 */
-#define L_ACCELTIME_f             0.01f                 /* 快速运动加速过程时间*/
-#define L_DECEELTIME_f            0.01f                 /* 快速运动减速过程时间*/
+#define fast_57END                100                 /* 快速运动末速度 */
+#define fast_57ACTIME             0.05f                 /* 快速运动加速过程时间*/
+#define fast_57DETIME             0.05f                 /* 快速运动减速过程时间*/
 //慢速运动，步数较少
-#define L_V_END_s                 100                 /* 慢速运动末速度 */
-#define L_ACCELTIME_s             0.01f                 /* 慢速运动加速过程时间 */
-#define L_DECEELTIME_s            0.01f                 /* 慢速运动减速过程时间 */
+#define slow_57END                20                 /* 慢速运动末速度 */
+#define slow_57ACTIME             0.01f                 /* 慢速运动加速过程时间 */
+#define slow_57DETIME             0.01f                 /* 慢速运动减速过程时间 */
 
 
 /*平移电机参数宏*/
 //快速运动，步数较多
-#define T_V_END_f                 300                 /* 快速运动末速度 */
-#define T_ACCELTIME_f             0.5f                 /* 快速运动加速过程时间*/
-#define T_DECEELTIME_f            0.5f                 /* 快速运动减速过程时间*/
+#define fast_42END                300                 /* 快速运动末速度 */
+#define fast_42ACTIME             0.5f                 /* 快速运动加速过程时间*/
+#define fast_42DETIME             0.5f                 /* 快速运动减速过程时间*/
 //慢速运动，步数较少
-#define T_V_END_s                 100                 /* 慢速运动末速度 */
-#define T_ACCELTIME_s             0.03                 /* 慢速运动加速过程时间 */
-#define T_DECEELTIME_s            0.03                 /* 慢速运动减速过程时间 */
+#define slow_42END                100                 /* 慢速运动末速度 */
+#define slow_42ACTIME             0.1                 /* 慢速运动加速过程时间 */
+#define slow_42DETIME             0.1                 /* 慢速运动减速过程时间 */
+
 
 /*舵机角度参数宏*/
+#define Z_sec1          10.0
 #define ZHANGKAI        60.0
 #define BIHE            87.0
 
@@ -40,8 +42,7 @@ void zhengji(void);
 void canshu_init(void);
 void bushu_init(void);
 /*工作函数*/
-void Crane_Init_juece(void);
-void Crane_Init_yundong(void);
+void Crane_Init(void);
 void sec1(void);
 void section2_zhunbei(void);
 void section3_zhunbei(void);

@@ -7,9 +7,10 @@
 Servo1   	 PA6	 
 Servo2   	 PA7	 
 
+
 */
 
-double star_angle=0;//起始角度
+double star_angle[2]={0};//起始角度
 double stop_angle=0;//终止角度
 uint16_t set_num=0;//调整次数
 uint16_t pulse=0,stop_pulse=0;
@@ -24,8 +25,10 @@ int id=0;//舵机编号
  */
 void steer_init(double Start_Angle) 
 {
-	star_angle=Start_Angle;//设置舵机起始角度。可以修改
-	pulse=star_angle*100/9+500;
+	star_angle[0]=Start_Angle;//设置舵机起始角度。可以修改
+	star_angle[1]=Start_Angle;//设置舵机起始角度。可以修改
+	
+	pulse=star_angle[0]*100/9+500;
 	__HAL_TIM_SET_COMPARE(&htim3,TIM_CHANNEL_1,pulse);
 	__HAL_TIM_SET_COMPARE(&htim3,TIM_CHANNEL_2,pulse);
 }
@@ -40,9 +43,18 @@ void steer(double target_angle,int Servo_num)
 {
 	while(steering);
 	id = Servo_num;//给舵机赋值 1、2、3-全部运行
-	set_num = ceil(fabs(target_angle - star_angle)*steer_tim);//ceil向上取整，fabs去绝对值，每个角度做8次
+	if(id==1||id==2) 
+	{
+			set_num = ceil(fabs(target_angle - star_angle[id-1])*steer_tim);//ceil向上取整，fabs去绝对值，每个角度做8次
+	}
+	else if(id==3) 
+	{
+			set_num = ceil(fabs(target_angle - star_angle[0])*steer_tim);//ceil向上取整，fabs去绝对值，每个角度做8次
+	}
+	
 	stop_angle = target_angle;
 	stop_pulse = stop_angle*100/9+500;
+	
 	HAL_TIM_Base_Start_IT(&htim10);//启动定时器10中断
 	steering = 1;
 
@@ -58,10 +70,19 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 			if(set_num>=num)
 			{
 					num++;
-					angle = star_angle+3*(stop_angle-star_angle)*num*num/set_num/set_num
-					-2*(stop_angle-star_angle)*num*num*num/set_num/set_num/set_num;
-					pulse = angle*100/9+500;//加减速计算函数
-					switch(id)
+				if(id==1||id==2)
+				{
+						angle = star_angle[id-1]+3*(stop_angle-star_angle[id-1])*num*num/set_num/set_num
+						-2*(stop_angle-star_angle[id-1])*num*num*num/set_num/set_num/set_num;
+						pulse = angle*100/9+500;//加减速计算函数
+				}
+				else if(id==3)
+				{
+						angle = star_angle[0]+3*(stop_angle-star_angle[0])*num*num/set_num/set_num
+						-2*(stop_angle-star_angle[0])*num*num*num/set_num/set_num/set_num;
+						pulse = angle*100/9+500;//加减速计算函数
+				}
+				switch(id)
 					{
 							case SERVO_1:
 									__HAL_TIM_SET_COMPARE(&htim3,TIM_CHANNEL_1,pulse);//转到中间角度
@@ -77,10 +98,24 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 				}
 			else 
 			{
-					__HAL_TIM_SET_COMPARE(&htim3,TIM_CHANNEL_1,stop_angle);//转到停止角度
-					__HAL_TIM_SET_COMPARE(&htim3,TIM_CHANNEL_2,stop_angle);//转到停止角度
+					switch(id)
+					{
+							case SERVO_1:
+									__HAL_TIM_SET_COMPARE(&htim3,TIM_CHANNEL_1,stop_angle);//转到停止角度
+									star_angle[0] = stop_angle;
+							break;
+							case SERVO_2:
+									__HAL_TIM_SET_COMPARE(&htim3,TIM_CHANNEL_2,stop_angle);//转到停止角度
+									star_angle[1] = stop_angle;
+							break;
+							case SERVO_ALL:
+									__HAL_TIM_SET_COMPARE(&htim3,TIM_CHANNEL_1,stop_angle);//转到停止角度
+									__HAL_TIM_SET_COMPARE(&htim3,TIM_CHANNEL_2,stop_angle);//转到停止角度
+									star_angle[0] = stop_angle;
+									star_angle[1] = stop_angle;
+							break;
+					}
 					HAL_TIM_Base_Stop_IT(&htim10);//关闭定时器10中断
-					star_angle = stop_angle;
 					steering = 0;
 					num = 0;
 					id=0;

@@ -82,6 +82,7 @@ void ceju(void)
 	{	
 		for(int j = 0; j < 16; j++)
 		{
+//			printf("99999");
 //			printf("TOF_data[%d]==%d\r\n",j,TOF_data[j]);
 			if((TOF_data[j]==0x57 && TOF_data[j+1]==0x00 && TOF_data[j+2]==0xFF) && (verifyCheckSum(&TOF_data[j],TOF_length)==1))
 			{
@@ -152,11 +153,15 @@ void ceju(void)
 						if(qvwu_infer[0][location-1]==2&&qvwu_infer[1][location-1]==1)//1号爪子有物品，2号爪子没物品
 						{
 								servo1_zhuaqv=1;//有物品立即抓
+//								printf("/********识别结果：有钩码***********/\r\n");
+//								printf("\r\n");
 								printf("section1抓取在外环\r\n");
 						}
 						else if(qvwu_infer[0][location-1]==1&&qvwu_infer[1][location-1]==1)//1号爪子没有物品，2号爪子没物品
 						{
 								servo1_zhuaqv=2;//下一个位置抓取
+//								printf("/********识别结果：无钩码***********/\r\n");
+//								printf("\r\n");
 								printf("section1抓取在内环\r\n");
 						}
 				}
@@ -215,7 +220,7 @@ void ceju(void)
 							}
 							else if(qvwu_infer[1][location-1]==1)//2号爪子没有物品
 							{
-									servo1_zhuaqv=2;//下一个位置抓取
+									servo2_zhuaqv=2;//下一个位置抓取
 									printf("section3 servo2抓取在外环\r\n");
 							}
 					}
@@ -241,26 +246,30 @@ void panduan(uint8_t sta, uint8_t location)
 	switch(sta)
 	{
 			case fulwork:
-					if(dis1<= 160)
+					if(dis1<= 210)
 							qvwu_infer[0][Location] = 2;//有物品
-					else if(dis1> 160)
+					else if(dis1> 210)
 							qvwu_infer[0][Location] = 1;//没有物品
-					if(dis2<= 160)
+					if(dis2<= 205)
 							qvwu_infer[1][Location] = 2;//有物品
-					else if(dis2> 160)
+					else if(dis2> 205)
 							qvwu_infer[1][Location] = 1;//没有物品
 					break;			
 			case singlework:
 					qvwu_infer[1][Location] = 1;//没有物品
-					if(dis1<= 160)
+					if(dis1<= 210)
 							qvwu_infer[0][Location] = 2;//有物品
-					else if(dis1> 160)
+					else if(dis1> 210)
 							qvwu_infer[0][Location] = 1;//没有物品
 					break;
 			case fulfree:
 					break;					
 	}
 }
+//170-190
+//232
+
+
 
 
 

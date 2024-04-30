@@ -1,7 +1,7 @@
 Dependencies for Project '2024crane', Target '2024crane': (DO NOT MODIFY !)
 CompilerVersion: 5060960::V5.06 update 7 (build 960)::.\ARMCC
 F (startup_stm32f407xx.s)(0x6606BC43)(--cpu Cortex-M4.fp.sp -g --apcs=interwork --pd "__MICROLIB SETA 1"-I.\RTE\_2024crane-ID:\Keil5\ARM\CMSIS\5.7.0\CMSIS\Core\Include-ID:\Keil5\Keil\STM32F4xx_DFP\2.17.1\Drivers\CMSIS\Device\ST\STM32F4xx\Include--pd "__UVISION_VERSION SETA 538" --pd "_RTE_ SETA 1" --pd "STM32F407xx SETA 1" --pd "_RTE_ SETA 1"--list startup_stm32f407xx.lst --xref -o 2024crane\startup_stm32f407xx.o --depend 2024crane\startup_stm32f407xx.d)
-F (..\Core\Src\TOFSense.c)(0x66167197)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include-I.\RTE\_2024crane-ID:\Keil5\ARM\CMSIS\5.7.0\CMSIS\Core\Include-ID:\Keil5\Keil\STM32F4xx_DFP\2.17.1\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o 2024crane\tofsense.o --omf_browse 2024crane\tofsense.crf --depend 2024crane\tofsense.d)
+F (..\Core\Src\TOFSense.c)(0x6630E04F)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include-I.\RTE\_2024crane-ID:\Keil5\ARM\CMSIS\5.7.0\CMSIS\Core\Include-ID:\Keil5\Keil\STM32F4xx_DFP\2.17.1\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o 2024crane\tofsense.o --omf_browse 2024crane\tofsense.crf --depend 2024crane\tofsense.d)
 I (../Core/Inc/TOFSense.h)(0x65F156DB)
 I (../Core/Inc/main.h)(0x660E6E38)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x65ABD0E0)
@@ -75,7 +75,7 @@ I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h)(0x65ABD0E0)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h)(0x65ABD0E0)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h)(0x65ABD0E0)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h)(0x65ABD0E0)
-F (..\Core\Src\stepper_motor.c)(0x66213A54)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include-I.\RTE\_2024crane-ID:\Keil5\ARM\CMSIS\5.7.0\CMSIS\Core\Include-ID:\Keil5\Keil\STM32F4xx_DFP\2.17.1\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o 2024crane\stepper_motor.o --omf_browse 2024crane\stepper_motor.crf --depend 2024crane\stepper_motor.d)
+F (..\Core\Src\stepper_motor.c)(0x6630BA88)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include-I.\RTE\_2024crane-ID:\Keil5\ARM\CMSIS\5.7.0\CMSIS\Core\Include-ID:\Keil5\Keil\STM32F4xx_DFP\2.17.1\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o 2024crane\stepper_motor.o --omf_browse 2024crane\stepper_motor.crf --depend 2024crane\stepper_motor.d)
 I (../Core/Inc/stepper_motor.h)(0x66063C8A)
 I (../Core/Inc/main.h)(0x660E6E38)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x65ABD0E0)
@@ -117,7 +117,7 @@ I (D:\Keil5\ARM\ARMCC\include\math.h)(0x5E8E2EB2)
 I (../Core/Inc/usart.h)(0x65F16C1C)
 I (D:\Keil5\ARM\ARMCC\include\stdio.h)(0x5E8E2EB2)
 I (D:\Keil5\ARM\ARMCC\include\stdlib.h)(0x5E8E2EB2)
-F (..\Core\Src\servo.c)(0x6612C482)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include-I.\RTE\_2024crane-ID:\Keil5\ARM\CMSIS\5.7.0\CMSIS\Core\Include-ID:\Keil5\Keil\STM32F4xx_DFP\2.17.1\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o 2024crane\servo.o --omf_browse 2024crane\servo.crf --depend 2024crane\servo.d)
+F (..\Core\Src\servo.c)(0x663104AA)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include-I.\RTE\_2024crane-ID:\Keil5\ARM\CMSIS\5.7.0\CMSIS\Core\Include-ID:\Keil5\Keil\STM32F4xx_DFP\2.17.1\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o 2024crane\servo.o --omf_browse 2024crane\servo.crf --depend 2024crane\servo.d)
 I (../Core/Inc/servo.h)(0x6602EEFE)
 I (../Core/Inc/main.h)(0x660E6E38)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x65ABD0E0)
@@ -155,8 +155,8 @@ I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h)(0x65ABD0E0)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h)(0x65ABD0E0)
 I (../Core/Inc/tim.h)(0x65F12381)
 I (D:\Keil5\ARM\ARMCC\include\math.h)(0x5E8E2EB2)
-F (..\Core\Src\logic.c)(0x662134D3)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include-I.\RTE\_2024crane-ID:\Keil5\ARM\CMSIS\5.7.0\CMSIS\Core\Include-ID:\Keil5\Keil\STM32F4xx_DFP\2.17.1\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o 2024crane\logic.o --omf_browse 2024crane\logic.crf --depend 2024crane\logic.d)
-I (../Core/Inc/logic.h)(0x661BBA7E)
+F (..\Core\Src\logic.c)(0x6630E8D4)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include-I.\RTE\_2024crane-ID:\Keil5\ARM\CMSIS\5.7.0\CMSIS\Core\Include-ID:\Keil5\Keil\STM32F4xx_DFP\2.17.1\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o 2024crane\logic.o --omf_browse 2024crane\logic.crf --depend 2024crane\logic.d)
+I (../Core/Inc/logic.h)(0x6631055B)
 I (../Core/Inc/main.h)(0x660E6E38)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x65ABD0E0)
 I (../Core/Inc/stm32f4xx_hal_conf.h)(0x6606BC40)
@@ -197,7 +197,7 @@ I (../Core/Inc/usart.h)(0x65F16C1C)
 I (D:\Keil5\ARM\ARMCC\include\stdio.h)(0x5E8E2EB2)
 I (../Core/Inc/servo.h)(0x6602EEFE)
 I (D:\Keil5\ARM\ARMCC\include\math.h)(0x5E8E2EB2)
-F (../Core/Src/main.c)(0x66213AD1)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include-I.\RTE\_2024crane-ID:\Keil5\ARM\CMSIS\5.7.0\CMSIS\Core\Include-ID:\Keil5\Keil\STM32F4xx_DFP\2.17.1\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o 2024crane\main.o --omf_browse 2024crane\main.crf --depend 2024crane\main.d)
+F (../Core/Src/main.c)(0x6630F0EF)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include-I.\RTE\_2024crane-ID:\Keil5\ARM\CMSIS\5.7.0\CMSIS\Core\Include-ID:\Keil5\Keil\STM32F4xx_DFP\2.17.1\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o 2024crane\main.o --omf_browse 2024crane\main.crf --depend 2024crane\main.d)
 I (../Core/Inc/main.h)(0x660E6E38)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x65ABD0E0)
 I (../Core/Inc/stm32f4xx_hal_conf.h)(0x6606BC40)
@@ -242,7 +242,7 @@ I (../Core/Inc/TOFSense.h)(0x65F156DB)
 I (../Core/Inc/stepper_motor.h)(0x66063C8A)
 I (../Core/Inc/malloc.h)(0x6601A1DA)
 I (../Core/Inc/servo.h)(0x6602EEFE)
-I (../Core/Inc/logic.h)(0x661BBA7E)
+I (../Core/Inc/logic.h)(0x6631055B)
 F (../Core/Src/gpio.c)(0x6606BC3B)(--c99 -c --cpu Cortex-M4.fp.sp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include-I.\RTE\_2024crane-ID:\Keil5\ARM\CMSIS\5.7.0\CMSIS\Core\Include-ID:\Keil5\Keil\STM32F4xx_DFP\2.17.1\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="538" -D_RTE_ -DSTM32F407xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F407xx-o 2024crane\gpio.o --omf_browse 2024crane\gpio.crf --depend 2024crane\gpio.d)
 I (../Core/Inc/gpio.h)(0x65F12380)
 I (../Core/Inc/main.h)(0x660E6E38)
@@ -1175,4 +1175,4 @@ I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h)(0x65ABD0E0)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h)(0x65ABD0E0)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h)(0x65ABD0E0)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h)(0x65ABD0E0)
-F (..\readme.txt)(0x66213AB2)()
+F (..\readme.txt)(0x663104BA)()

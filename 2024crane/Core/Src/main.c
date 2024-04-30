@@ -34,9 +34,10 @@ TOF2：      PB10   PB11
 [通信]      TX     RX
 上位机：    PA9    PA10
 单片机2：   PC12   PD2
+*/
 
-/*********通讯解析*************/
 /*
+通讯解析
 三个识别点：1，4，7
 发送的字符信号：1，2，3
 解析：
@@ -92,25 +93,27 @@ TOF2：      PB10   PB11
 	平移motor3------------ +:边 -:中
 	平移motor4------------ +:边 -:中
 */
-double crane_init[3]={0.5,0.5,-3.25},/*motor1升  motor2升  motor3中*/
+
+uint8_t cs_flag=0;//测试参数
+double crane_init[3]={1.0,1.0,-3.20},/*motor1升  motor2升  motor3中*/
 //初始化步数数组
 
-sec1_bj[4]={-0.4,1.0,-0.2,0.5},/*motor1降  motor1升  motor1降  motor1升*/
+sec1_bj[3]={-0.85,1.02,-0.21},/*motor1降  motor1升  motor1降  motor1升*/
 //第一部分步进电机1、2起升升步数记录
 
-sce2_zhubei[2]={-0.95,3.25},/*motor1降  motor3边*/
+sce2_zhubei[2]={0.04,3.20},/*motor1降  motor3边*/
 //第二部分步进电机1，3运动步数记录
 
-sec2o3_qs[2][4]={
-{-0.4,2,-0.5,0.5},/*motor1降  motor1升  motor1降  motor1升*/
-{-0.4,2,-0.5,0.5} /*motor2降  motor2升  motor2降  motor2升*/
+sec2o3_qs[2][3]={
+{-0.85,1.87,-0.21},/*motor1降  motor1升  motor1降  motor1升*/
+{-0.85,1.87,-0.21} /*motor2降  motor2升  motor2降  motor2升*/
 },
 
-sec2o3_py[4]={3.25,1.0,4.2,4.3},//内平移（边）  外平移（边）  3大平移/4大平移（边）
+sec2o3_py[4]={3.25,1.10,4.3,4.3},//内平移（边）  外平移（边）  3大平移/4大平移（边）
 
 
 
-sce3_zhubei[3]={-1.0,-4.2,-4.2};/*motor1/motor2降  3大平移/4大平移（中）*/
+sce3_zhubei[3]={-0.81,-4.3,-4.3};/*motor1/motor2降  3大平移/4大平移（中）*/
 
 /****标志位所用参数***/
 uint8_t action=0;//初始化移动标志位
@@ -221,46 +224,51 @@ int main(void)
 	HAL_TIM_OC_Stop_IT(&htim8, TIM_CHANNEL_2);
 	HAL_TIM_OC_Stop_IT(&htim8, TIM_CHANNEL_3);
 	HAL_TIM_OC_Stop_IT(&htim8, TIM_CHANNEL_4);
-	
-/*-----------步进电机测试-----------*/
-//	g_add_pulse_count[0]=0;
-//	g_add_pulse_count[1]=0;
-//	g_add_pulse_count[2]=0;
-//	g_add_pulse_count[3]=0;
-//	stepmotor_move_rel(0,300,0.5f,0.5f,(4.2)*SPR,STEPPER_MOTOR_3);/* 一次加减速运动 */
-//	stepper_start(STEPPER_MOTOR_3);
-//	
-//	stepmotor_move_rel(0,300,0.5f,0.5f,(4.3)*SPR,STEPPER_MOTOR_4);/* 一次加减速运动 */
-//	stepper_start(STEPPER_MOTOR_4);
-//						g_add_pulse_count[2]=0;
-//						g_add_pulse_count[3]=0;
-//						stepmotor_move_rel(V_START,300,0.3f,0.3f,(-4.2)*SPR,STEPPER_MOTOR_3);
-//						stepmotor_move_rel(V_START,300,0.3f,0.3f,(-4.3)*SPR,STEPPER_MOTOR_4);
-//						stepper_start(STEPPER_MOTOR_3);
-//						stepper_start(STEPPER_MOTOR_4);
-//						
-//						g_add_pulse_count[0]=0;
-//						g_add_pulse_count[1]=0;
-//						
-//						stepmotor_move_rel(V_START,100,0.01,0.01,(-1.0)*SPR,STEPPER_MOTOR_1);
-//						stepmotor_move_rel(V_START,100,0.01,0.01,(-1.0)*SPR,STEPPER_MOTOR_2);
-//					
-//						stepper_start(STEPPER_MOTOR_1);
-//						stepper_start(STEPPER_MOTOR_2);
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-					zhengji();//整机运行函数
+//					zhengji();//整机运行函数
     /* USER CODE END WHILE */
-
+		
     /* USER CODE BEGIN 3 */
-    /**************舵机模块测试*******************/
-    //    steer_init(87);
+    /**************电机模块测试*******************/
+#if   0
+		if(cs_flag==0)
+		{
+					steer(ZHANGKAI,SERVO_2);
+					HAL_Delay(2000);
+					steer(ZHANGKAI,SERVO_1);
+					HAL_Delay(2000);
+//				g_add_pulse_count[0]=0;
+//				stepmotor_move_rel(V_START,fast_57END,fast_57ACTIME,fast_57DETIME,(1.0f)*SPR,STEPPER_MOTOR_1);;/* 一次加减速运动 */
+//				stepper_start(STEPPER_MOTOR_1);
+				cs_flag=1;	
+		}
+//							sec2o3_zhuaqv2();
+#elif 1
+		if(cs_flag==0)
+		{
+				g_add_pulse_count[1]=0;
+				stepmotor_move_rel(V_START,fast_57END,fast_57ACTIME,fast_57DETIME,(2.0f)*SPR,STEPPER_MOTOR_2);;/* 一次加减速运动 */
+				stepper_start(STEPPER_MOTOR_2);
+				cs_flag=1;
+		}
+#endif
+//		else if(cs_flag==1&&g_motor2_sta==STATE_IDLE)
+//		{
+//				HAL_Delay(1000);
+//				g_add_pulse_count[0]=0;
+//				stepmotor_move_rel(0,20,0.05f,0.05f,(-2.0)*SPR,STEPPER_MOTOR_2);/* 一次加减速运动 */
+//				stepper_start(STEPPER_MOTOR_2);
+//				cs_flag=2;
+//		}
+//		
 		/**************激光测距模块测试***************/
-		//			ceju();		
+//					ceju();		
 /***********************************/
   }
   /* USER CODE END 3 */
