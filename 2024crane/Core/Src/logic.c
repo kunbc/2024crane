@@ -16,7 +16,7 @@ uint8_t qingkuang=0,cejvfankui_flag=0;/*测距结果综合*/
 uint8_t ceju_flag=0;/*测距标志位*/
 
 //步进电机参数
-extern double crane_init[3],sec1_bj[3],sce2_zhubei[2],sec2o3_qs[2][3],sec2o3_py[4],sce3_zhubei[3];/*步数数组*/
+extern double crane_init[3],sec1_bj[3],sce2_zhubei[2],sec2o3_qs[2][3],sec2o3_py[2][3],sce3_zhubei[3];/*步数数组*/
 extern __IO  uint32_t g_add_pulse_count[4];    /* 脉冲个数累计*/
 uint8_t bj1_jc=0,bj2_jc=0,bj3_jc=0,bj4_jc=0;/*决策标志*/
 
@@ -934,8 +934,8 @@ int nei_py(void)
 				g_add_pulse_count[2]=0;
 				g_add_pulse_count[3]=0;
 
-				stepmotor_move_rel(V_START,fast_42END,fast_42ACTIME,fast_42DETIME,sec2o3_py[0]*SPR,STEPPER_MOTOR_3);
-				stepmotor_move_rel(V_START,fast_42END,fast_42ACTIME,fast_42DETIME,sec2o3_py[0]*SPR,STEPPER_MOTOR_4);
+				stepmotor_move_rel(V_START,fast_42END,fast_42ACTIME,fast_42DETIME,sec2o3_py[0][0]*SPR,STEPPER_MOTOR_3);
+				stepmotor_move_rel(V_START,fast_42END,fast_42ACTIME,fast_42DETIME,sec2o3_py[1][0]*SPR,STEPPER_MOTOR_4);
 				
 				bj3_jc++;//1//不会再进
 				bj4_jc++;//1//不会再进
@@ -946,13 +946,11 @@ int nei_py(void)
 		}
 		if(g_motor4_sta==STATE_IDLE && g_motor3_sta==STATE_IDLE && jcdl2_flag==1)
 		{	
-				printf("*8888*\r\n");
 				bj3_jc++;//2
 				bj4_jc++;//2
 				if(bj3_jc==2&&bj4_jc==2) 
 				{
 						jcdl2_flag=2;
-						printf("*99999*\r\n");
 						return OK;
 				}
 		}
@@ -975,11 +973,11 @@ int wai_py(void)
 		if(bj3_jc==0&&bj4_jc==0&&jcdl2_flag==3)//抓完可以移动
 		{
 				g_add_pulse_count[2]=0;
-				stepmotor_move_rel(V_START,slow_42END,slow_42ACTIME,slow_42DETIME,sec2o3_py[1]*SPR,STEPPER_MOTOR_3);
+				stepmotor_move_rel(V_START,slow_42END,slow_42ACTIME,slow_42DETIME,sec2o3_py[0][1]*SPR,STEPPER_MOTOR_3);
 				bj3_jc++;//1//不会再进
 				
 				g_add_pulse_count[3]=0;
-				stepmotor_move_rel(V_START,slow_42END,slow_42ACTIME,slow_42DETIME,sec2o3_py[1]*SPR,STEPPER_MOTOR_4);
+				stepmotor_move_rel(V_START,slow_42END,slow_42ACTIME,slow_42DETIME,sec2o3_py[1][1]*SPR,STEPPER_MOTOR_4);
 				bj4_jc++;//1//不会再进
 				
 				stepper_start(STEPPER_MOTOR_3);
@@ -1018,11 +1016,11 @@ int da_py(void)
 			if(bj3_jc==0&&bj4_jc==0)//抓完可以移动
 			{
 					g_add_pulse_count[2]=0;
-					stepmotor_move_rel(V_START,fast_42END,fast_42ACTIME,fast_42DETIME,sec2o3_py[2]*SPR,STEPPER_MOTOR_3);
+					stepmotor_move_rel(V_START,fast_42END,fast_42ACTIME,fast_42DETIME,sec2o3_py[0][2]*SPR,STEPPER_MOTOR_3);
 					bj3_jc++;//1//不会再进
 					
 					g_add_pulse_count[3]=0;
-					stepmotor_move_rel(V_START,fast_42END,fast_42ACTIME,fast_42DETIME,sec2o3_py[3]*SPR,STEPPER_MOTOR_4);
+					stepmotor_move_rel(V_START,fast_42END,fast_42ACTIME,fast_42DETIME,sec2o3_py[1][2]*SPR,STEPPER_MOTOR_4);
 					bj4_jc++;//1//不会再进
 					
 					stepper_start(STEPPER_MOTOR_3);

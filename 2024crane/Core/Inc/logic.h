@@ -9,9 +9,9 @@
 
 /*起升电机参数宏*/
 //快速运动，步数较多
-#define fast_57END                100                 /* 快速运动末速度 */
-#define fast_57ACTIME             0.05f                 /* 快速运动加速过程时间*/
-#define fast_57DETIME             0.05f                 /* 快速运动减速过程时间*/
+#define fast_57END                80                 /* 快速运动末速度 */
+#define fast_57ACTIME             0.01f                 /* 快速运动加速过程时间*/
+#define fast_57DETIME             0.01f                 /* 快速运动减速过程时间*/
 //慢速运动，步数较少
 #define slow_57END                20                 /* 慢速运动末速度 */
 #define slow_57ACTIME             0.01f                 /* 慢速运动加速过程时间 */
@@ -21,12 +21,12 @@
 /*平移电机参数宏*/
 //快速运动，步数较多
 #define fast_42END                300                 /* 快速运动末速度 */
-#define fast_42ACTIME             0.5f                 /* 快速运动加速过程时间*/
-#define fast_42DETIME             0.5f                 /* 快速运动减速过程时间*/
+#define fast_42ACTIME             0.45f                 /* 快速运动加速过程时间*/
+#define fast_42DETIME             0.45f                 /* 快速运动减速过程时间*/
 //慢速运动，步数较少
-#define slow_42END                100                 /* 慢速运动末速度 */
-#define slow_42ACTIME             0.1                 /* 慢速运动加速过程时间 */
-#define slow_42DETIME             0.1                 /* 慢速运动减速过程时间 */
+#define slow_42END                200                 /* 慢速运动末速度 */
+#define slow_42ACTIME             0.2                 /* 慢速运动加速过程时间 */
+#define slow_42DETIME             0.2                 /* 慢速运动减速过程时间 */
 
 
 /*舵机角度参数宏*/

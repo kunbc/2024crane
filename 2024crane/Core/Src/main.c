@@ -95,13 +95,13 @@ TOF2：      PB10   PB11
 */
 
 uint8_t cs_flag=0;//测试参数
-double crane_init[3]={1.0,1.0,-3.20},/*motor1升  motor2升  motor3中*/
+double crane_init[3]={1.0,1.0,-3.27},/*motor1升  motor2升  motor3中*/
 //初始化步数数组
 
 sec1_bj[3]={-0.85,1.02,-0.21},/*motor1降  motor1升  motor1降  motor1升*/
 //第一部分步进电机1、2起升升步数记录
 
-sce2_zhubei[2]={0.04,3.20},/*motor1降  motor3边*/
+sce2_zhubei[2]={0.04,3.27},/*motor1降  motor3边*/
 //第二部分步进电机1，3运动步数记录
 
 sec2o3_qs[2][3]={
@@ -109,11 +109,12 @@ sec2o3_qs[2][3]={
 {-0.85,1.87,-0.21} /*motor2降  motor2升  motor2降  motor2升*/
 },
 
-sec2o3_py[4]={3.25,1.10,4.3,4.3},//内平移（边）  外平移（边）  3大平移/4大平移（边）
+sec2o3_py[2][3]={
+{3.195,0.985,4.152},//motor3:内平移（边）外平移（边）大平移（边）
+{3.160,1.090,4.249} //motor4:内平移（边）外平移（边）大平移（边）
+},
 
-
-
-sce3_zhubei[3]={-0.81,-4.3,-4.3};/*motor1/motor2降  3大平移/4大平移（中）*/
+sce3_zhubei[3]={-0.81,-4.152,-4.249};/*motor1/motor2降  3大平移/4大平移（中）*/
 
 /****标志位所用参数***/
 uint8_t action=0;//初始化移动标志位
@@ -231,7 +232,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-//					zhengji();//整机运行函数
+					zhengji();//整机运行函数
     /* USER CODE END WHILE */
 		
     /* USER CODE BEGIN 3 */
@@ -239,25 +240,32 @@ int main(void)
 #if   0
 		if(cs_flag==0)
 		{
+					HAL_Delay(1000);
 					steer(ZHANGKAI,SERVO_2);
 					HAL_Delay(2000);
-					steer(ZHANGKAI,SERVO_1);
-					HAL_Delay(2000);
+					steer(87.0,SERVO_2);
+//					HAL_Delay(2000);
+//					steer(BIHE,SERVO_ALL);
+//					HAL_Delay(2000);
+//					steer(ZHANGKAI,SERVO_ALL);
 //				g_add_pulse_count[0]=0;
 //				stepmotor_move_rel(V_START,fast_57END,fast_57ACTIME,fast_57DETIME,(1.0f)*SPR,STEPPER_MOTOR_1);;/* 一次加减速运动 */
 //				stepper_start(STEPPER_MOTOR_1);
 				cs_flag=1;	
 		}
 //							sec2o3_zhuaqv2();
-#elif 1
+#elif 0
 		if(cs_flag==0)
 		{
+				g_add_pulse_count[0]=0;
 				g_add_pulse_count[1]=0;
-				stepmotor_move_rel(V_START,fast_57END,fast_57ACTIME,fast_57DETIME,(2.0f)*SPR,STEPPER_MOTOR_2);;/* 一次加减速运动 */
+				stepmotor_move_rel(V_START,80,0.01,0.01,(-1.0f)*SPR,STEPPER_MOTOR_2);;/* 一次加减速运动 */
+//				stepmotor_move_rel(V_START,100,0.01,0.01,(-1.0f)*SPR,STEPPER_MOTOR_1);;/* 一次加减速运动 */
 				stepper_start(STEPPER_MOTOR_2);
+//				stepper_start(STEPPER_MOTOR_1);
 				cs_flag=1;
 		}
-#endif
+#endif 
 //		else if(cs_flag==1&&g_motor2_sta==STATE_IDLE)
 //		{
 //				HAL_Delay(1000);
