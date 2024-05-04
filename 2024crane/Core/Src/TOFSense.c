@@ -97,7 +97,7 @@ void ceju(void)
 //								 printf("ms\r\n");
 	
 				 TOF_distance1 = (TOF_data[j+8]) | (TOF_data[j+9]<<8) | (TOF_data[j+10]<<16);
-//								 printf("TOF distance is: %ld", TOF_distance1);
+///								 printf("TOF distance1 is: %ld", TOF_distance1);
 //								 printf("mm\r\n");
 	
 				 TOF_status = TOF_data[j+11];
@@ -126,7 +126,7 @@ void ceju(void)
 	//								 printf("ms\r\n");
 
 				 TOF_distance2 = (TOF_data2[j+8]) | (TOF_data2[j+9]<<8) | (TOF_data2[j+10]<<16);
-//								 printf("TOF distance is: %ld", TOF_distance2);
+//								 printf("TOF distance2 is: %ld", TOF_distance2);
 //								 printf("mm\r\n");
 				
 				 TOF_status = TOF_data2[j+11];

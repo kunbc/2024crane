@@ -51,6 +51,7 @@ void steer(double target_angle,int Servo_num)
 	{
 			set_num = ceil(fabs(target_angle - star_angle[0])*steer_tim);//ceil向上取整，fabs去绝对值，每个角度做8次
 	}
+  
 	
 	stop_angle = target_angle;
 	stop_pulse = stop_angle*100/9+500;
